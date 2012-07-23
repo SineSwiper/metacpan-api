@@ -26,16 +26,17 @@ like(
     'Incorrect input',
 );
 
-my $result = $mcpan->rating('UC6tqabqR-y3xxZk0tgVXQ');
-ok( $result, 'Got result' );
-
-$result = $mcpan->rating( id => 'UC6tqabqR-y3xxZk0tgVXQ' );
-ok( $result, 'Got result' );
-
-$result = $mcpan->rating(
+my $result = $mcpan->rating(
     search => {
         filter => "distribution:Moose",
         fields => [ "date", "rating" ],
     },
 );
+ok( $result, 'Got result' );
+my $rating_id = $result->{hits}{hits}[0]{_id};
+
+$result = $mcpan->rating($rating_id);
+ok( $result, 'Got result' );
+
+$result = $mcpan->rating( id => $rating_id );
 ok( $result, 'Got result' );

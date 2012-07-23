@@ -125,6 +125,10 @@ sub _build_extra_params {
 
     # if it's deep, JSON encoding needs to be involved
     if (scalar grep { ref } values %extra) {
+        # if this is a deep search query, forgetting
+        # query -> match_all in a common mistake...
+        $extra{query} = { match_all => {} } unless ($extra{query});
+    
         my $query_json = to_json( \%extra, { canonical => 1 } );
         %extra = ( source => $query_json );
     }
